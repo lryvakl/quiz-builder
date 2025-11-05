@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { getAllQuizzes, deleteQuiz, QuizSummary } from '@/services/quizzes';
-import { Trash2 } from 'lucide-react';
+import { ListChecks, Plus } from 'lucide-react';
 import Snackbar from '@/components/Snackbar';
+import QuizList from '@/components/QuizList';
 
 export default function QuizzesPage() {
     const [quizzes, setQuizzes] = useState<QuizSummary[]>([]);
@@ -30,62 +31,39 @@ export default function QuizzesPage() {
         try {
             await deleteQuiz(id);
             setQuizzes((prev) => prev.filter((q) => q.id !== id));
-            setSnackbar({ message: '🗑️ Quiz deleted successfully', type: 'success' });
+            setSnackbar({ message: 'Quiz deleted successfully', type: 'success' });
         } catch (err) {
             console.error(err);
             setSnackbar({ message: 'Failed to delete quiz', type: 'error' });
         }
     };
 
-    if (loading) return <p className="text-center text-gray-500 mt-10">Loading...</p>;
+    if (loading)
+        return <p className="text-center text-gray-400 mt-10">Loading...</p>;
 
     return (
         <>
-            <main className="max-w-3xl mx-auto p-6">
+            <main className="max-w-3xl mx-auto p-6 bg-bg min-h-screen text-text">
+                {/* Header */}
+                <div className="flex justify-between items-center mb-10">
+                    <h1 className="text-3xl font-semibold flex items-center gap-3 text-text">
+                        <ListChecks className="w-7 h-7 text-accent" />
+                        All Quizzes
+                    </h1>
 
-                <div className="flex justify-between items-center mb-8">
-                    <h1 className="text-3xl font-semibold flex items-center gap-2">📘 All Quizzes</h1>
                     <Link
                         href="/create"
-                        className="inline-flex items-center gap-1 text-blue-600 hover:text-blue-700 font-medium"
+                        className="inline-flex items-center gap-2 text-accent hover:text-accentHover font-medium transition-colors"
                     >
-                        <span className="text-lg">＋</span> Create Quiz
+                        <Plus className="w-5 h-5" />
+                        Create Quiz
                     </Link>
                 </div>
 
-                {quizzes.length === 0 ? (
-                    <p className="text-gray-500">No quizzes yet. Create your first one!</p>
-                ) : (
-                    <div className="grid gap-4">
-                        {quizzes.map((quiz) => (
-                            <div
-                                key={quiz.id}
-                                className="group flex justify-between items-center border border-gray-200 bg-white shadow-sm rounded-xl p-5 hover:shadow-md transition-all duration-200"
-                            >
-                                <div>
-                                    <Link
-                                        href={`/quizzes/${quiz.id}`}
-                                        className="text-lg font-medium text-gray-800 hover:text-blue-600 transition-colors"
-                                    >
-                                        {quiz.title}
-                                    </Link>
-                                    <p className="text-sm text-gray-500 mt-1">
-                                        {quiz.questionsCount}{' '}
-                                        {quiz.questionsCount === 1 ? 'question' : 'questions'}
-                                    </p>
-                                </div>
-
-                                <button
-                                    onClick={() => handleDelete(quiz.id)}
-                                    className="p-2 rounded-lg hover:bg-red-50 hover:text-red-600 transition"
-                                    title="Delete quiz"
-                                >
-                                    <Trash2 className="w-5 h-5" />
-                                </button>
-                            </div>
-                        ))}
-                    </div>
-                )}
+                {/* Quiz List */}
+                <div className="bg-card border border-border rounded-2xl p-6 shadow-lg">
+                    <QuizList quizzes={quizzes} onDelete={handleDelete} />
+                </div>
             </main>
 
             {snackbar && (

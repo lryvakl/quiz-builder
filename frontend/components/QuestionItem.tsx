@@ -11,48 +11,62 @@ export default function QuestionItem({ question, onRemove, onUpdate }: Props) {
     const { id, text, type, options } = question;
 
     return (
-        <div className="relative border border-gray-200 rounded-xl p-5 mt-4 bg-white shadow-sm transition hover:shadow-md">
-            {/* remove (X) button */}
+        <div
+            className="relative glass border border-border rounded-2xl p-6 shadow-md
+                 transition-all duration-300 hover:shadow-lg hover:border-accent/40
+                 text-gray-200 animate-slide-up"
+        >
             <button
                 type="button"
                 onClick={() => onRemove(id)}
-                className="absolute top-3 right-3 text-gray-400 hover:text-red-500 transition"
+                className="absolute top-3 right-3 text-gray-500 hover:text-red-400
+                   hover:scale-110 transition-all duration-200"
                 title="Remove question"
             >
                 <X className="w-5 h-5" />
             </button>
 
-            {/* Question Text */}
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-medium text-gray-400 mb-2">
                 Question Text
-                <input
-                    type="text"
-                    value={text}
-                    required
-                    onChange={(e) => onUpdate(id, 'text', e.target.value)}
-                    className="mt-1 w-full border border-gray-300 rounded-lg p-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
-                    placeholder="Enter your question..."
-                />
             </label>
+            <input
+                type="text"
+                value={text}
+                required
+                onChange={(e) => onUpdate(id, 'text', e.target.value)}
+                className="w-full bg-transparent border border-border rounded-lg px-3 py-2
+                   text-gray-200 placeholder:text-gray-500
+                   focus:outline-none focus:ring-2 focus:ring-accent/40
+                   transition-all"
+                placeholder="Enter your question..."
+            />
 
-            {/* Question Type */}
-            <label className="block text-sm font-medium text-gray-700 mb-2 mt-3">
+            <label className="block text-sm font-medium text-gray-400 mt-5 mb-2">
                 Type
-                <select
-                    value={type}
-                    onChange={(e) => onUpdate(id, 'type', e.target.value as Question['type'])}
-                    className="mt-1 w-full border border-gray-300 rounded-lg p-2 focus:ring-2 focus:ring-blue-500 focus:outline-none bg-white"
-                >
-                    <option value="INPUT">Short text answer</option>
-                    <option value="BOOLEAN">True / False</option>
-                    <option value="CHECKBOX">Multiple choice</option>
-                </select>
             </label>
+            <select
+                value={type}
+                onChange={(e) => onUpdate(id, 'type', e.target.value as Question['type'])}
+                className="w-full bg-transparent border border-border rounded-lg px-3 py-2
+                   text-gray-200 focus:outline-none focus:ring-2 focus:ring-accent/40
+                   transition-all cursor-pointer"
+            >
+                <option value="INPUT" className="bg-[#0d0d0d] text-gray-200">
+                    Short text answer
+                </option>
+                <option value="BOOLEAN" className="bg-[#0d0d0d] text-gray-200">
+                    True / False
+                </option>
+                <option value="CHECKBOX" className="bg-[#0d0d0d] text-gray-200">
+                    Multiple choice
+                </option>
+            </select>
 
-            {/* Checkbox Options */}
             {type === 'CHECKBOX' && (
-                <label className="block text-sm font-medium text-gray-700 mt-3">
-                    Options (comma separated)
+                <>
+                    <label className="block text-sm font-medium text-gray-400 mt-5 mb-2">
+                        Options (comma separated)
+                    </label>
                     <input
                         type="text"
                         value={(options || []).join(', ')}
@@ -63,10 +77,13 @@ export default function QuestionItem({ question, onRemove, onUpdate }: Props) {
                                 e.target.value.split(',').map((s) => s.trim())
                             )
                         }
-                        className="mt-1 w-full border border-gray-300 rounded-lg p-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                        className="w-full bg-transparent border border-border rounded-lg px-3 py-2
+                       text-gray-200 placeholder:text-gray-500
+                       focus:outline-none focus:ring-2 focus:ring-accent/40
+                       transition-all"
                         placeholder="e.g. Option A, Option B, Option C"
                     />
-                </label>
+                </>
             )}
         </div>
     );

@@ -1,3 +1,5 @@
+import { Plus } from "lucide-react";
+
 interface Props {
     onAdd: () => void;
 }
@@ -7,10 +9,13 @@ export default function AddQuestionButton({ onAdd }: Props) {
         <button
             type="button"
             onClick={onAdd}
-            className="mt-4 inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg shadow transition-all duration-200 focus:ring-2 focus:ring-blue-400 focus:outline-none"
+            className="inline-flex items-center justify-center gap-2 px-5 py-3
+                 rounded-xl font-medium text-sm text-white
+                 bg-accent hover:bg-accent-hover
+                 shadow-glow hover:scale-[1.03]
+                 transition-all duration-300"
         >
-            <span className="text-lg">➕</span>
-            Add Question
+            <Plus className="w-5 h-5" />
         </button>
     );
 }

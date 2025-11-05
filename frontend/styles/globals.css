@@ -1,9 +1,33 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&display=swap');
 @import "tailwindcss";
 @import "tailwindcss/utilities";
 
-/* custom styles if needed */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 body {
-    @apply bg-gray-50 text-gray-900;
+    font-family: 'Outfit', sans-serif;
+}
+:root {
+    --color-bg: #0d0d0d;
+    --color-card: #1a1a1a;
+    --color-border: #2b2b2b;
+    --color-text: #e5e5e5;
+    --color-accent: #5d03c0;
+    --color-accent-hover: #9c57f1;
+}
+
+body {
+    background-color: var(--color-bg);
+    color: var(--color-text);
+    font-family: 'Outfit', sans-serif;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+.glass {
+    background: rgba(30, 30, 30, 0.6);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 @keyframes slide-up {
