@@ -1,10 +1,5 @@
 # Quiz Builder
 
-
-### Project Structure
-
-
-
 ---
 
 ### Tech Stack
