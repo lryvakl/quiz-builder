@@ -1,5 +1,6 @@
 import prisma from '../prisma/prisma.js';
 import { CreateQuizDto } from '../types/quizzes.types.js';
+import { Prisma } from '@prisma/client';
 
 class QuizzesService {
   async createQuiz(data: CreateQuizDto) {
@@ -19,8 +20,8 @@ class QuizzesService {
             text: q.text,
             type: q.type,
             order: q.order ?? i,
-            options: q.options ?? null,
-            correctAnswers: q.correctAnswers ?? null,
+            options: q.options ?? Prisma.JsonNull,
+            correctAnswers: q.correctAnswers ?? Prisma.JsonNull,
           })),
         },
       },
