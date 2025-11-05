@@ -4,7 +4,7 @@
 
 ###  Deployment : 
 
-  https://quiz-builder-psi.vercel.app/quizzes
+  https://quiz-builder-psi.vercel.app
 ---
 ### Tech Stack
 
