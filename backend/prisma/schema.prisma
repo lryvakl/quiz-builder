@@ -9,7 +9,7 @@ datasource db {
 
 model Quiz {
   id        Int        @id @default(autoincrement())
-  title     String
+  title     String     @db.VarChar(250)
   createdAt DateTime   @default(now())
   questions Question[]
 }
@@ -18,7 +18,7 @@ model Question {
   id             Int          @id @default(autoincrement())
   quiz           Quiz         @relation(fields: [quizId], references: [id], onDelete: Cascade)
   quizId         Int
-  text           String
+  text           String       @db.VarChar(500)
   type           QuestionType
   order          Int          @default(0)
   options        Json?
