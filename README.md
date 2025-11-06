@@ -26,17 +26,17 @@
 
 **Option 1** — Through frontend UI:
 
-- 1. Go to deployed site → /create
+1. Go to deployed site → /create
  https://quiz-builder-psi.vercel.app/create
- - 2. Fill in the form:
+2. Fill in the form:
 	-	Quiz title: something short, e.g. Frontend Frameworks
- -	Add questions
- -	3. Click Submit Quiz
+Add questions
+3. Click Submit Quiz
    4. You should see a success snackbar.
    5. Navigate to /quizzes (arrow button)— your quiz will appear in the list.
    6. Click the arrow to view it at /quizzes/[id].
-  **Option 2** — Insert directly via your backend API:
-You can make a POST request to your backend endpoint:
+ - **Option 2** — Insert directly via your backend API:
+- You can make a POST request to your backend endpoint:
 ```bash
 curl -X POST https://quiz-builder-production.up.railway.app/quizzes \
 -H "Content-Type: application/json" \
