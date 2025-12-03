@@ -8,9 +8,9 @@ app.use(cors());
 app.use(express.json());
 
 app.get('/', (_req, res) => {
-  res.json({ message: 'Quiz Builder API is running 🚀' });
+  res.json({ message: 'Quiz Builder API is running' });
 });
 
-app.use('/quizzes', quizzesRouter);
+app.use('/api', quizzesRouter);
 
 export default app;

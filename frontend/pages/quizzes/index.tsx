@@ -1,3 +1,3 @@
-import QuizzesPage from './QuizzesPage';
+import QuizzesPage from '../../components/QuizzesPage';
 
 export default QuizzesPage;
