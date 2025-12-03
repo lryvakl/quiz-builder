@@ -5,16 +5,23 @@ import { QuizSummary } from "../types/types";
 import { ListChecks, Plus } from "lucide-react";
 import Snackbar from "@/components/Snackbar";
 import QuizList from "@/components/QuizList";
+import LogoutButton from "@/components/LogoutButton";
+import { authService } from "@/services/auth";
 
 export default function QuizzesPage() {
   const [quizzes, setQuizzes] = useState<QuizSummary[]>([]);
   const [loading, setLoading] = useState(true);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+
   const [snackbar, setSnackbar] = useState<{
     message: string;
     type: "success" | "error";
   } | null>(null);
 
   useEffect(() => {
+    const token = authService.getToken();
+    setIsAuthenticated(!!token);
+
     const load = async () => {
       try {
         const data = await getAllQuizzes();
@@ -52,14 +59,28 @@ export default function QuizzesPage() {
             <ListChecks className="w-7 h-7 text-accent" />
             All Quizzes
           </h1>
+          <div className="flex items-center gap-4">
+            {isAuthenticated ? (
+              <>
+                <Link
+                  href="/create"
+                  className="inline-flex items-center gap-2 text-accent hover:text-accentHover font-medium transition-colors"
+                >
+                  <Plus className="w-5 h-5" />
+                  Create Quiz
+                </Link>
 
-          <Link
-            href="/create"
-            className="inline-flex items-center gap-2 text-accent hover:text-accentHover font-medium transition-colors"
-          >
-            <Plus className="w-5 h-5" />
-            Create Quiz
-          </Link>
+                <LogoutButton />
+              </>
+            ) : (
+              <Link
+                href="/login"
+                className="px-4 py-2 bg-(--color-accent) text-white rounded-lg hover:bg-(--color-accent-hover) transition font-medium"
+              >
+                Login
+              </Link>
+            )}
+          </div>
         </div>
 
         {/* Quiz List */}
