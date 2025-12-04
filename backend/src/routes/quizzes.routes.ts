@@ -4,15 +4,20 @@ import { getAllQuizzesController } from '../controllers/quizzes/getAllQuizzes.co
 import { getQuizByIdController } from '../controllers/quizzes/getQuizById.controller.js';
 import { deleteQuizController } from '../controllers/quizzes/deleteQuiz.controller.js';
 import { register, login } from '../controllers/auth/auth.controller.js';
+import { submitQuiz } from '../controllers/quizzes/submission.controller.js';
 import { validate } from '../middlewares/validate.middleware.js';
+import { optionalAuth } from '../middlewares/optionalAuth.middleware.js';
+import { authMiddleware } from '../middlewares/auth.middleware.js';
 import { RegisterSchema, LoginSchema } from '../schemas/auth.schema.js';
 
 const router = Router();
 
 router.post('/register', validate(RegisterSchema), register);
 router.post('/login', validate(LoginSchema), login);
-router.post('/quizzes', createQuizController);
-router.get('/quizzes', getAllQuizzesController);
+router.get('/quizzes', optionalAuth, getAllQuizzesController);
 router.get('/quizzes/:id', getQuizByIdController);
-router.delete('/quizzes/:id', deleteQuizController);
+router.post('/quizzes', authMiddleware, createQuizController);
+router.delete('/quizzes/:id', authMiddleware, deleteQuizController);
+router.post('/quizzes/:id/submit', optionalAuth, submitQuiz);
+
 export default router;

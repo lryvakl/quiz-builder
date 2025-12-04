@@ -2,13 +2,9 @@ import { useState } from "react";
 import { createQuiz } from "@/services/quizzes";
 import QuestionList from "./QuestionList";
 import AddQuestionButton from "./buttons/AddQuestionButton";
-
-export interface Question {
-  id: number;
-  text: string;
-  type: "BOOLEAN" | "INPUT" | "CHECKBOX";
-  options?: string[];
-}
+import { QuizPayload, Question } from "@/types/types";
+import Spinner from "@/components/utils/Spinner";
+import TextInput from "@/components/inputs/TextInput";
 
 interface QuizFormProps {
   onShowSnackbar?: (message: string, type: "success" | "error") => void;
@@ -17,11 +13,18 @@ interface QuizFormProps {
 export default function QuizForm({ onShowSnackbar }: QuizFormProps) {
   const [title, setTitle] = useState("");
   const [questions, setQuestions] = useState<Question[]>([]);
+  const [submitting, setSubmitting] = useState(false);
 
   const addQuestion = () => {
     setQuestions((prev) => [
       ...prev,
-      { id: Date.now(), text: "", type: "INPUT", options: [] },
+      {
+        id: Date.now(),
+        text: "",
+        type: "INPUT",
+        options: [],
+        correctAnswers: null,
+      },
     ]);
   };
 
@@ -29,18 +32,47 @@ export default function QuizForm({ onShowSnackbar }: QuizFormProps) {
     setQuestions((prev) => prev.filter((q) => q.id !== id));
   };
 
-  const updateQuestion = (id: number, key: keyof Question, value: any) => {
+  const updateQuestion = (id: number, key: string, value: any) => {
     setQuestions((prev) =>
-      prev.map((q) => (q.id === id ? { ...q, [key]: value } : q))
+      prev.map((q) => {
+        if (q.id === id) {
+          if (key === "type") {
+            return { ...q, [key]: value, correctAnswers: null, options: [] };
+          }
+          return { ...q, [key]: value };
+        }
+        return q;
+      })
     );
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setSubmitting(true);
 
-    const payload = {
+    const hasErrors = questions.some(
+      (q) =>
+        q.correctAnswers === null ||
+        (Array.isArray(q.correctAnswers) && q.correctAnswers.length === 0)
+    );
+
+    if (hasErrors) {
+      onShowSnackbar?.(
+        "Please specify correct answers for all questions",
+        "error"
+      );
+      setSubmitting(false);
+      return;
+    }
+
+    const payload: QuizPayload = {
       title,
-      questions: questions.map(({ id, ...rest }) => rest),
+      questions: questions.map((q) => ({
+        text: q.text,
+        type: q.type,
+        options: q.options,
+        correctAnswers: q.correctAnswers,
+      })),
     };
 
     try {
@@ -51,6 +83,8 @@ export default function QuizForm({ onShowSnackbar }: QuizFormProps) {
     } catch (err) {
       console.error(err);
       onShowSnackbar?.("Failed to create quiz", "error");
+    } finally {
+      setSubmitting(false);
     }
   };
 
@@ -59,21 +93,15 @@ export default function QuizForm({ onShowSnackbar }: QuizFormProps) {
       onSubmit={handleSubmit}
       className="flex flex-col gap-8 p-8 transition-all duration-300 animate-slide-up"
     >
-      <div>
-        <label className="block text-sm font-semibold text-gray-300 mb-2 tracking-wide">
-          Quiz Title
-        </label>
-        <input
-          type="text"
-          value={title}
-          required
-          onChange={(e) => setTitle(e.target.value)}
-          placeholder="Name your quiz..."
-          className="w-full bg-transparent border border-border rounded-lg px-4 py-3 text-gray-100 placeholder:text-gray-500 focus:ring-2 focus:ring-accent focus:border-accent outline-none transition-all duration-300"
-        />
-      </div>
+      <TextInput
+        label="Quiz Title"
+        value={title}
+        onChange={(e) => setTitle(e.target.value)}
+        placeholder="Name your quiz..."
+        required
+      />
 
-      <div className="bg-[rgba(255,255,255,0.02)] border border-border rounded-xl p-6">
+      <div>
         <QuestionList
           questions={questions}
           onRemove={removeQuestion}
@@ -86,9 +114,24 @@ export default function QuizForm({ onShowSnackbar }: QuizFormProps) {
 
       <button
         type="submit"
-        className="mt-2 bg-accent hover:bg-accent-hover text-white font-semibold py-3 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 focus:ring-2 focus:ring-accent focus:outline-none"
+        disabled={submitting}
+        className="w-full mt-8 py-4 rounded-xl font-bold text-white text-lg tracking-wide
+             bg-linear-to-r from-(--color-accent) to-(--color-accent-hover)
+             shadow-lg shadow-(--color-accent)/30
+             hover:shadow-(--color-accent)/50 hover:scale-[1.02] hover:-translate-y-0.5
+             active:scale-95 active:translate-y-0
+             transition-all duration-300 ease-out
+             disabled:opacity-70 disabled:cursor-not-allowed disabled:transform-none disabled:shadow-none
+             flex items-center justify-center gap-2"
       >
-        Submit Quiz
+        {submitting ? (
+          <>
+            <Spinner className="w-5 h-5 text-white" />
+            <span>Creating...</span>
+          </>
+        ) : (
+          "Submit Quiz"
+        )}
       </button>
     </form>
   );

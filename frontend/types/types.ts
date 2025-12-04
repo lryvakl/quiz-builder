@@ -19,10 +19,11 @@ export interface AuthResponse {
 }
 
 export interface QuestionPayload {
+  id?: number;
   text: string;
   type: "BOOLEAN" | "INPUT" | "CHECKBOX";
   options?: string[];
-  correctAnswers?: string[];
+  correctAnswers?: string | boolean | string[] | null;
 }
 
 export interface QuizPayload {
@@ -34,9 +35,37 @@ export interface QuizSummary {
   id: number;
   title: string;
   questionsCount: number;
+  myResult?: {
+    score: number;
+    total: number;
+  } | null;
 }
 
-export interface QuizDetails extends QuizPayload {
+export interface Question {
+  id: number;
+  text: string;
+  type: "BOOLEAN" | "INPUT" | "CHECKBOX";
+  options?: string[];
+  correctAnswers?: string | boolean | string[] | null;
+}
+
+export interface QuizDetails extends Omit<QuizPayload, "questions"> {
   id: number;
   createdAt: string;
+  questions: Question[];
+}
+
+export interface SubmissionAnswer {
+  questionId: number;
+  answer: string | boolean | string[];
+}
+
+export interface SubmissionPayload {
+  answers: SubmissionAnswer[];
+}
+
+export interface QuizResult {
+  score: number;
+  total: number;
+  attemptId: number;
 }

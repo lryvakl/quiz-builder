@@ -13,6 +13,7 @@ model User {
   password  String  
   name      String?
   createdAt DateTime @default(now())
+  attempts  QuizAttempt[] 
 }
 
 model Quiz {
@@ -20,6 +21,7 @@ model Quiz {
   title     String     @db.VarChar(250)
   createdAt DateTime   @default(now())
   questions Question[]
+  attempts  QuizAttempt[] 
 }
 
 model Question {
@@ -32,6 +34,29 @@ model Question {
   options        Json?
   correctAnswers Json?
   createdAt      DateTime     @default(now())
+  userAnswers    UserAnswer[]
+}
+
+model QuizAttempt {
+  id          Int      @id @default(autoincrement())
+  quizId      Int
+  quiz        Quiz     @relation(fields: [quizId], references: [id], onDelete: Cascade)
+  userId      Int?     
+  user        User?    @relation(fields: [userId], references: [id])
+  score       Int      
+  total       Int      
+  createdAt   DateTime @default(now())
+  answers     UserAnswer[]
+}
+
+model UserAnswer {
+  id             Int          @id @default(autoincrement())
+  attemptId      Int
+  attempt        QuizAttempt  @relation(fields: [attemptId], references: [id], onDelete: Cascade)
+  questionId     Int
+  question       Question     @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  answer         Json         
+  isCorrect      Boolean      
 }
 
 enum QuestionType {

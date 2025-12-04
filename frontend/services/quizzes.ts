@@ -1,4 +1,5 @@
 import { QuizPayload, QuizSummary, QuizDetails } from "../types/types";
+import { SubmissionPayload, QuizResult } from "../types/types";
 
 const BASE_URL = process.env.NEXT_PUBLIC_API_URL;
 
@@ -48,14 +49,43 @@ export async function deleteQuiz(id: number): Promise<void> {
 }
 
 export async function getAllQuizzes(): Promise<QuizSummary[]> {
-  const res = await fetch(`${BASE_URL}/quizzes`);
+  const headers = getAuthHeaders();
+  const res = await fetch(`${BASE_URL}/quizzes`, {
+    headers: headers as any,
+  });
 
   if (!res.ok) throw new Error("Failed to fetch quizzes");
   return res.json();
 }
+
 export async function getQuizById(id: number): Promise<QuizDetails> {
   const res = await fetch(`${BASE_URL}/quizzes/${id}`);
 
   if (!res.ok) throw new Error(`Quiz ${id} not found`);
   return res.json();
+}
+
+export async function submitQuiz(
+  quizId: number,
+  data: SubmissionPayload
+): Promise<QuizResult> {
+  const res = await fetch(`${BASE_URL}/quizzes/${quizId}/submit`, {
+    method: "POST",
+    headers: getAuthHeaders(),
+    body: JSON.stringify(data),
+  });
+
+  if (!res.ok) {
+    const errorText = await res.text();
+
+    try {
+      const errorJson = JSON.parse(errorText);
+      throw new Error(errorJson.message || "Failed to submit quiz");
+    } catch {
+      throw new Error(`Failed to submit quiz: ${errorText}`);
+    }
+  }
+
+  const responseData = await res.json();
+  return responseData.result;
 }
