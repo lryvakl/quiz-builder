@@ -3,10 +3,11 @@ import Link from "next/link";
 import { getAllQuizzes, deleteQuiz } from "@/services/quizzes";
 import { QuizSummary } from "../types/types";
 import { ListChecks, Plus } from "lucide-react";
-import Snackbar from "@/components/Snackbar";
+import Snackbar from "@/components/utils/Snackbar";
 import QuizList from "@/components/QuizList";
 import LogoutButton from "@/components/buttons/LogoutButton";
 import { authService } from "@/services/auth";
+import Loader from "@/components/utils/Loader";
 
 export default function QuizzesPage() {
   const [quizzes, setQuizzes] = useState<QuizSummary[]>([]);
@@ -47,15 +48,14 @@ export default function QuizzesPage() {
     }
   };
 
-  if (loading)
-    return <p className="text-center text-gray-400 mt-10">Loading...</p>;
+  if (loading) return <Loader />;
 
   return (
     <>
       <main className="max-w-3xl mx-auto p-6 bg-bg min-h-screen text-text">
         {/* Header */}
-        <div className="flex justify-between items-center mb-10">
-          <h1 className="text-3xl font-semibold flex items-center gap-3 text-text">
+        <div className="flex justify-between items-center mb-10 animate-slide-up">
+          <h1 className="text-3xl font-semibold flex items-center gap-3 text-text ">
             <ListChecks className="w-7 h-7 text-accent" />
             All Quizzes
           </h1>
@@ -84,8 +84,14 @@ export default function QuizzesPage() {
         </div>
 
         {/* Quiz List */}
-        <div className="bg-card border border-border rounded-2xl p-6 shadow-lg">
-          <QuizList quizzes={quizzes} onDelete={handleDelete} />
+        <div className="bg-card border border-border rounded-2xl p-6 shadow-lg animate-slide-up">
+          {quizzes.length > 0 ? (
+            <QuizList quizzes={quizzes} onDelete={handleDelete} />
+          ) : (
+            <div className="text-center py-10 text-gray-500">
+              No quizzes found. Be the first to create one!
+            </div>
+          )}
         </div>
       </main>
 

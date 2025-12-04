@@ -30,22 +30,41 @@ class QuizzesService {
 
     return quiz;
   }
-  async getAllQuizzes() {
+  getAllQuizzes = async (userId?: number) => {
     const quizzes = await prisma.quiz.findMany({
       include: {
         _count: {
           select: { questions: true },
         },
+
+        attempts: userId
+          ? {
+              where: { userId },
+              orderBy: { score: 'desc' },
+              take: 1,
+            }
+          : false,
       },
       orderBy: { createdAt: 'desc' },
     });
 
-    return quizzes.map((q) => ({
-      id: q.id,
-      title: q.title,
-      questionsCount: q._count.questions,
-    }));
-  }
+    return quizzes.map((quiz) => {
+      const bestAttempt = quiz.attempts?.[0];
+
+      return {
+        id: quiz.id,
+        title: quiz.title,
+        questionsCount: quiz._count.questions,
+
+        myResult: bestAttempt
+          ? {
+              score: bestAttempt.score,
+              total: bestAttempt.total,
+            }
+          : null,
+      };
+    });
+  };
 
   async getQuizById(id: number) {
     const quiz = await prisma.quiz.findUnique({

@@ -10,7 +10,7 @@ export async function deleteQuizController(req: Request, res: Response) {
     }
 
     await quizzesService.deleteQuizById(id);
-    res.status(204).send(); // No Content
+    res.status(204).send();
   } catch (error: any) {
     const message = error.message === 'Quiz not found' ? error.message : 'Failed to delete quiz';
     res.status(error.message === 'Quiz not found' ? 404 : 500).json({ message });

@@ -1,7 +1,9 @@
 import { useState } from "react";
 import { useRouter } from "next/router";
-import { authService } from "../services/auth";
 import Link from "next/link";
+import { authService } from "../services/auth";
+import Spinner from "@/components/utils/Spinner";
+import AuthInput from "@/components/inputs/AuthInput";
 
 export default function RegisterPage() {
   const router = useRouter();
@@ -38,6 +40,9 @@ export default function RegisterPage() {
         <h1 className="text-3xl font-bold text-center mb-2">
           Create an Account
         </h1>
+        <p className="text-gray-400 text-center mb-8">
+          Join us to start creating quizzes
+        </p>
 
         {error && (
           <div className="bg-red-500/10 border border-red-500 text-red-500 px-4 py-3 rounded-lg mb-6 text-sm text-center">
@@ -46,57 +51,49 @@ export default function RegisterPage() {
         )}
 
         <form onSubmit={handleSubmit} className="flex flex-col gap-5">
-          <div className="flex flex-col gap-2">
-            <label className="text-sm font-medium ml-1 text-gray-300">
-              Name
-            </label>
-            <input
-              type="text"
-              name="name"
-              placeholder="Your name"
-              value={formData.name}
-              onChange={handleChange}
-              required
-              className="w-full bg-(--color-bg) border border-(--color-border) text-(--color-text) rounded-xl px-4 py-3 outline-none focus:border-(--color-accent) focus:ring-1 focus:ring-(--color-accent) transition-all placeholder-gray-600"
-            />
-          </div>
+          <AuthInput
+            label="Name"
+            type="text"
+            name="name"
+            placeholder="Your name"
+            value={formData.name}
+            onChange={handleChange}
+            required
+          />
 
-          <div className="flex flex-col gap-2">
-            <label className="text-sm font-medium ml-1 text-gray-300">
-              Email
-            </label>
-            <input
-              type="email"
-              name="email"
-              placeholder="example@mail.com"
-              value={formData.email}
-              onChange={handleChange}
-              required
-              className="w-full bg-(--color-bg) border border-(--color-border) text-(--color-text) rounded-xl px-4 py-3 outline-none focus:border-(--color-accent) focus:ring-1 focus:ring-(--color-accent) transition-all placeholder-gray-600"
-            />
-          </div>
+          <AuthInput
+            label="Email"
+            type="email"
+            name="email"
+            placeholder="example@mail.com"
+            value={formData.email}
+            onChange={handleChange}
+            required
+          />
 
-          <div className="flex flex-col gap-2">
-            <label className="text-sm font-medium ml-1 text-gray-300">
-              Password
-            </label>
-            <input
-              type="password"
-              name="password"
-              placeholder="Minimum 6 characters"
-              value={formData.password}
-              onChange={handleChange}
-              required
-              className="w-full bg-(--color-bg) border border-(--color-border) text-(--color-text) rounded-xl px-4 py-3 outline-none focus:border-(--color-accent) focus:ring-1 focus:ring-(--color-accent) transition-all placeholder-gray-600"
-            />
-          </div>
+          <AuthInput
+            label="Password"
+            type="password"
+            name="password"
+            placeholder="Minimum 6 characters"
+            value={formData.password}
+            onChange={handleChange}
+            required
+          />
 
           <button
             type="submit"
             disabled={loading}
-            className="mt-4 w-full bg-(--color-accent) hover:bg-(--color-accent-hover) text-white font-bold py-3.5 rounded-xl transition-all duration-300 shadow-lg shadow-(--color-accent)/20 active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed"
+            className="mt-4 w-full bg-(--color-accent) hover:bg-(--color-accent-hover) text-white font-bold py-3.5 rounded-xl transition-all duration-300 shadow-lg shadow-(--color-accent)/20 active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
           >
-            {loading ? "Loading..." : "Register"}
+            {loading ? (
+              <>
+                <Spinner className="w-5 h-5 text-white" />
+                <span>Creating account...</span>
+              </>
+            ) : (
+              "Register"
+            )}
           </button>
         </form>
 
