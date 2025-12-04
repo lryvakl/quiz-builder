@@ -1,5 +1,5 @@
 import { useRouter } from "next/router";
-import { authService } from "../services/auth";
+import { authService } from "@/services/auth";
 import { useState } from "react";
 
 export default function LogoutButton() {

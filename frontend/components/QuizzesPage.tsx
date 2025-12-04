@@ -5,7 +5,7 @@ import { QuizSummary } from "../types/types";
 import { ListChecks, Plus } from "lucide-react";
 import Snackbar from "@/components/Snackbar";
 import QuizList from "@/components/QuizList";
-import LogoutButton from "@/components/LogoutButton";
+import LogoutButton from "@/components/buttons/LogoutButton";
 import { authService } from "@/services/auth";
 
 export default function QuizzesPage() {

@@ -4,7 +4,7 @@ import { getQuizById } from "@/services/quizzes";
 import { QuizDetails } from "../../types/types";
 import DetailQuizItem from "@/components/DetailQuizItem";
 import { HelpCircle, Loader2 } from "lucide-react";
-import BackButton from "@/components/BackButton";
+import BackButton from "@/components/buttons/BackButton";
 
 export default function QuizDetailPage() {
   const router = useRouter();
