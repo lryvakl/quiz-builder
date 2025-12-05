@@ -5,7 +5,7 @@ import { QuizSummary } from "../types/types";
 import { ListChecks, Plus } from "lucide-react";
 import Snackbar from "@/components/utils/Snackbar";
 import QuizList from "@/components/QuizList";
-import LogoutButton from "@/components/buttons/LogoutButton";
+import { User } from "lucide-react";
 import Loader from "@/components/utils/Loader";
 
 export default function QuizzesPage() {
@@ -70,7 +70,12 @@ export default function QuizzesPage() {
                   Create Quiz
                 </Link>
 
-                <LogoutButton />
+                <Link
+                  href="/profile"
+                  className="p-2 rounded-full bg-white/5 hover:bg-white/10 transition-colors"
+                >
+                  <User className="w-6 h-6 text-gray-300" />
+                </Link>
               </>
             ) : (
               <Link

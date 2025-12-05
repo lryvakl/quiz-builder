@@ -9,11 +9,13 @@ import { validate } from '../middlewares/validate.middleware.js';
 import { optionalAuth } from '../middlewares/optionalAuth.middleware.js';
 import { authMiddleware } from '../middlewares/auth.middleware.js';
 import { RegisterSchema, LoginSchema } from '../schemas/auth.schema.js';
+import { getProfile } from '../controllers/auth/user.controller.js';
 
 const router = Router();
 
 router.post('/register', validate(RegisterSchema), register);
 router.post('/login', validate(LoginSchema), login);
+router.get('/profile', authMiddleware, getProfile);
 router.get('/quizzes', optionalAuth, getAllQuizzesController);
 router.get('/quizzes/:id', getQuizByIdController);
 router.post('/quizzes', authMiddleware, createQuizController);
