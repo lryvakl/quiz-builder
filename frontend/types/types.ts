@@ -18,6 +18,26 @@ export interface AuthResponse {
   };
 }
 
+export interface UserProfile {
+  user: {
+    id: number;
+    name: string | null;
+    email: string;
+    createdAt: string;
+  };
+  stats: {
+    totalQuizzesTaken: number;
+    averageAccuracy: number;
+  };
+  history: {
+    id: number;
+    quizTitle: string;
+    score: number;
+    total: number;
+    date: string;
+  }[];
+}
+
 export interface QuestionPayload {
   id?: number;
   text: string;
