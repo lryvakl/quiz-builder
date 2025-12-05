@@ -17,7 +17,7 @@ export default function RemoveButton({
       type="button"
       onClick={onClick}
       title={title}
-      className={`p-2.5 text-gray-500 hover:text-red-400 hover:bg-red-500/10 
+      className={`p-2.5 text-gray-500 hover:text-red-400 hover:bg-red-500/10 cursor-pointer
                   rounded-xl transition-all duration-200 
                   hover:scale-105 active:scale-95 ${className || ""}`}
     >

@@ -6,12 +6,12 @@ import { ListChecks, Plus } from "lucide-react";
 import Snackbar from "@/components/utils/Snackbar";
 import QuizList from "@/components/QuizList";
 import LogoutButton from "@/components/buttons/LogoutButton";
-import { authService } from "@/services/auth";
 import Loader from "@/components/utils/Loader";
 
 export default function QuizzesPage() {
   const [quizzes, setQuizzes] = useState<QuizSummary[]>([]);
   const [loading, setLoading] = useState(true);
+
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   const [snackbar, setSnackbar] = useState<{
@@ -20,7 +20,7 @@ export default function QuizzesPage() {
   } | null>(null);
 
   useEffect(() => {
-    const token = authService.getToken();
+    const token = localStorage.getItem("token");
     setIsAuthenticated(!!token);
 
     const load = async () => {
@@ -86,7 +86,10 @@ export default function QuizzesPage() {
         {/* Quiz List */}
         <div className="bg-card border border-border rounded-2xl p-6 shadow-lg animate-slide-up">
           {quizzes.length > 0 ? (
-            <QuizList quizzes={quizzes} onDelete={handleDelete} />
+            <QuizList
+              quizzes={quizzes}
+              onDelete={isAuthenticated ? handleDelete : undefined}
+            />
           ) : (
             <div className="text-center py-10 text-gray-500">
               No quizzes found. Be the first to create one!

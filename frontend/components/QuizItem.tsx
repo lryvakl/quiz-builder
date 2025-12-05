@@ -5,7 +5,7 @@ import QuizResultBadge from "./QuizResultBadge";
 import RemoveButton from "./buttons/RemoveButton";
 interface QuizItemProps {
   quiz: QuizSummary;
-  onDelete: (id: number) => void;
+  onDelete?: (id: number) => Promise<void>;
 }
 
 export default function QuizItem({ quiz, onDelete }: QuizItemProps) {
@@ -46,15 +46,17 @@ export default function QuizItem({ quiz, onDelete }: QuizItemProps) {
           <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
         </Link>
 
-        <RemoveButton
-          onClick={(e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            onDelete(quiz.id);
-          }}
-          title="Delete quiz"
-          className="border border-transparent hover:border-red-500/20"
-        />
+        {onDelete && (
+          <RemoveButton
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              onDelete(quiz.id);
+            }}
+            title="Delete quiz"
+            className="border border-transparent hover:border-red-500/20"
+          />
+        )}
       </div>
     </div>
   );

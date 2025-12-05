@@ -1,25 +1,19 @@
-import axios from "axios";
+import { api } from "./api";
 import { RegisterData, LoginData, AuthResponse } from "../types/types";
-
-const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 export const authService = {
   async register(data: RegisterData) {
-    const response = await axios.post<AuthResponse>(
-      `${API_URL}/register`,
-      data
-    );
-    return response.data;
+    return api.post<AuthResponse>("/register", data);
   },
 
   async login(data: LoginData) {
-    const response = await axios.post<AuthResponse>(`${API_URL}/login`, data);
+    const response = await api.post<AuthResponse>("/login", data);
 
-    if (response.data.token) {
-      localStorage.setItem("token", response.data.token);
+    if (response.token) {
+      localStorage.setItem("token", response.token);
     }
 
-    return response.data;
+    return response;
   },
 
   logout() {

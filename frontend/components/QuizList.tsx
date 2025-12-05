@@ -3,7 +3,7 @@ import QuizItem from "./QuizItem";
 
 interface QuizListProps {
   quizzes: QuizSummary[];
-  onDelete: (id: number) => void;
+  onDelete?: (id: number) => Promise<void>;
 }
 
 export default function QuizList({ quizzes, onDelete }: QuizListProps) {
